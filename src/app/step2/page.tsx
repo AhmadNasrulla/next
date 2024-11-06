@@ -174,11 +174,11 @@ const Step2 = () => {
   );
 };
 
-// Wrap Step2 component with Suspense
+// Wrap Step2 component with Suspenses
 const Step2WithSuspense = () => (
   <Suspense fallback={<div>Loading...</div>}>
     <Step2 />
-  </Suspense>
+  </Suspense> 
 );
 
 export default Step2WithSuspense;
