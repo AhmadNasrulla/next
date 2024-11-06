@@ -1,16 +1,18 @@
-"use client";
+"use client";  // Make sure this is at the top of the file
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { db, storage } from '../firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Course } from '../types';
 
+// Discount Calculation Function
 const calculateDiscountedPrice = (course: Course, discountRate: number): number => {
   return course.price * (1 - discountRate);  // Applying the discount to the price
 };
 
+// Main Step2 Component
 const Step2 = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -172,4 +174,11 @@ const Step2 = () => {
   );
 };
 
-export default Step2;
+// Wrap Step2 component with Suspense
+const Step2WithSuspense = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <Step2 />
+  </Suspense>
+);
+
+export default Step2WithSuspense;
