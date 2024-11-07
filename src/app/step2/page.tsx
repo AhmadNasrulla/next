@@ -12,6 +12,11 @@ const calculateDiscountedPrice = (course: Course, discountRate: number): number 
   return course.price * (1 - discountRate);  // Applying the discount to the price
 };
 
+const calculateRegistrationFee = (discountRate: number): number => {
+  const originalFee = 8000;
+  return originalFee * (1 - discountRate);  // Discounted registration fee
+};
+
 // Main Step2 Component
 const Step2 = () => {
   const router = useRouter();
@@ -31,7 +36,11 @@ const Step2 = () => {
   const calculateSubtotal = (): number =>
     selectedCourses.reduce((acc, course) => acc + course.price, 0);
 
-  const calculateDiscountedTotal = () => calculateSubtotal() * 0.7;
+  const calculateDiscountedTotal = () => {
+    const courseSubtotal = calculateSubtotal();
+    const registrationFee = calculateRegistrationFee(0.3);  // 30% discount on registration fee
+    return courseSubtotal * 0.7 + registrationFee;  // Adding the discounted registration fee to the total
+  };
 
   const handleSubmit = async () => {
     if (!paymentProof) {
@@ -94,6 +103,17 @@ const Step2 = () => {
           );
         })}
       </ul>
+
+      {/* Registration Fee */}
+      <div className="flex justify-between items-center mb-6 text-gray-700">
+        <div className="flex flex-col">
+          <span className="font-medium">Registration Fee</span>
+          <span className="text-sm text-gray-500">Original Fee: PKR 8,000</span>
+        </div>
+        <div className="flex flex-col items-end">
+          <span className="font-semibold text-green-500">PKR {calculateRegistrationFee(0.3).toFixed(2)}</span>
+        </div>
+      </div>
 
       {/* Total Price */}
       <div className="mb-6 flex justify-between text-xl font-semibold text-gray-900">
@@ -178,7 +198,7 @@ const Step2 = () => {
 const Step2WithSuspense = () => (
   <Suspense fallback={<div>Loading...</div>}>
     <Step2 />
-  </Suspense> 
+  </Suspense>
 );
 
 export default Step2WithSuspense;
